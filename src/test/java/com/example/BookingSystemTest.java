@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -60,6 +61,23 @@ class BookingSystemTest {
 
         verify(roomRepository).save(room);
         verify(notificationService).sendBookingConfirmation(any(Booking.class));
+    }
+
+    @Test
+    @DisplayName("bookRoom kastar exception om starttid är före nutid")
+    void bookRoom_shouldThrowException_whenStartTimeIsBeforeNow() {
+        // Arrange
+        String roomId = "room01";
+        LocalDateTime beforeNow = NOW.minusDays(1);
+        LocalDateTime endTime = NOW.plusDays(2);
+
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
+
+        // Act + Assert
+        assertThatThrownBy(() ->
+                bookingSystem.bookRoom(roomId, beforeNow, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Kan inte boka tid i dåtid");
     }
 
 }
