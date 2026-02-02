@@ -64,6 +64,30 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("bookRoom returnerar false när rummet inte är ledigt")
+    void bookRoom_shouldReturnFalse_whenRoomIsNotAvailable() throws NotificationException {
+        // Arrange
+        String roomId = "room01";
+        LocalDateTime startTime = NOW.plusDays(1);
+        LocalDateTime endTime = NOW.plusDays(2);
+        Room room = new Room(roomId, "Dubbelrum");
+
+        room.addBooking(new Booking("existing-booking", roomId, startTime.minusHours(1), endTime.plusHours(1)));
+
+        when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
+
+        // Act
+        boolean result = bookingSystem.bookRoom(roomId, startTime, endTime);
+
+        // Assert
+        assertThat(result).isFalse();
+        
+        verify(roomRepository, never()).save(any());
+        verify(notificationService, never()).sendBookingConfirmation(any());
+    }
+
+
+    @Test
     @DisplayName("bookRoom kastar exception om starttid är före nutid")
     void bookRoom_shouldThrowException_whenStartTimeIsBeforeNow() {
         // Arrange
