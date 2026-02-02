@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -187,5 +188,33 @@ class BookingSystemTest {
 
         verify(roomRepository).save(room);
     }
+
+    @Test
+    @DisplayName("cancelBooking returnerar true när framtida bokning finns")
+    void cancelBooking_shouldReturnTrue_whenBookingExists() throws NotificationException {
+        // Arrange
+        String roomId = "room01";
+        String bookingId = "booking01";
+
+        Room room = new Room(roomId, "Dubbelrum");
+        room.addBooking(new Booking(bookingId, roomId, NOW.plusDays(1), NOW.plusDays(2)));
+
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+
+        // Act
+        boolean result = bookingSystem.cancelBooking(bookingId);
+
+        // Assert
+        assertThat(result).isTrue();
+
+        verify(roomRepository).save(room);
+        verify(notificationService).sendCancellationConfirmation(any(Booking.class));
+    }
+
+    // TODO: cancelBooking misslyckas när framtida bokning inte finns
+
+    // TODO: cancelBooking misslyckas när bokningen pågår eller redan passerat
+
 
 }
