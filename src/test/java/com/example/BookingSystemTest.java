@@ -37,11 +37,6 @@ class BookingSystemTest {
     private static final LocalDateTime NOW =
             LocalDateTime.of(2026, 1, 29, 9, 0);
 
-    @BeforeEach
-    void setUp() {
-        when(timeProvider.getCurrentTime()).thenReturn(NOW);
-    }
-
     @Test
     @DisplayName("bookRoom returnerar true när rummet är ledigt")
     void bookRoom_shouldReturnTrue_whenRoomIsAvailable() throws NotificationException {
@@ -51,6 +46,7 @@ class BookingSystemTest {
         LocalDateTime endTime = NOW.plusDays(2);
         Room room = new Room(roomId, "Dubbelrum");
 
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
         when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
 
         // Act
@@ -74,6 +70,7 @@ class BookingSystemTest {
 
         room.addBooking(new Booking("existing-booking", roomId, startTime.minusHours(1), endTime.plusHours(1)));
 
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
         when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
 
         // Act
