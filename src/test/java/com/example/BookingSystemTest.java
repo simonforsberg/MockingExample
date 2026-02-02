@@ -1,6 +1,5 @@
 package com.example;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -20,7 +18,6 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -356,8 +353,8 @@ class BookingSystemTest {
         }
 
         @Test
-        @DisplayName("cancelBooking returnerar false när en bokning pågår eller passerat")
-        void cancelBooking_shouldReturnFalse_whenBookingHasStarted() {
+        @DisplayName("cancelBooking kastar exeption när en bokning pågår eller passerat")
+        void cancelBooking_shouldThrowException_whenBookingHasStarted() {
             // Arrange
             String bookingId = "booking01";
             String roomId = "room01";
