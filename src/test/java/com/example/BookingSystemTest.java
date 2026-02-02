@@ -86,7 +86,6 @@ class BookingSystemTest {
         verify(notificationService, never()).sendBookingConfirmation(any());
     }
 
-
     @Test
     @DisplayName("bookRoom kastar exception om starttid är före nutid")
     void bookRoom_shouldThrowException_whenStartTimeIsBeforeNow() {
@@ -142,6 +141,24 @@ class BookingSystemTest {
                 Arguments.of(NOW.plusDays(2), NOW.plusDays(1)),
                 Arguments.of(NOW.plusHours(2), NOW.plusHours(1))
         );
+    }
+
+    @Test
+    @DisplayName("bookRoom kastar exception när rummet inte finns")
+    void bookRoom_shouldThrowException_whenRoomDoesNotExist() {
+        // Arrange
+        String roomId = "non-existent";
+
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
+        when(roomRepository.findById(roomId)).thenReturn(Optional.empty());
+
+        // Act + Assert
+        assertThatThrownBy(() ->
+                bookingSystem.bookRoom(roomId, NOW.plusDays(1), NOW.plusDays(2))
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Rummet existerar inte");
+
+        verifyNoInteractions(notificationService);
     }
 
 }
