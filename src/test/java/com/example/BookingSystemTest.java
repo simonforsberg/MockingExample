@@ -252,4 +252,15 @@ class BookingSystemTest {
         verify(roomRepository, never()).save(any());
     }
 
+    @Test
+    @DisplayName("cancelBooking kastar exception när boknings-ID är null")
+    void cancelBooking_shouldThrowException_whenBookingIdIsNull() {
+        // Act & Assert
+        assertThatThrownBy(() -> bookingSystem.cancelBooking(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Boknings-id kan inte vara null");
+
+        verifyNoInteractions(roomRepository, notificationService);
+    }
+
 }
