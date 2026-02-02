@@ -116,7 +116,6 @@ class BookingSystemTest {
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Bokning kräver giltiga");
     }
-    // Arrange
     static Stream<Arguments> invalidBookingInputs() {
         return Stream.of(
                 Arguments.of(null, NOW.plusDays(1), NOW.plusDays(2)),
@@ -130,7 +129,7 @@ class BookingSystemTest {
     @DisplayName("bookRoom kastar exception när sluttid är före starttid")
     void bookRoom_shouldThrowException_whenEndTimeIsBeforeStartTime(LocalDateTime startTime, LocalDateTime endTime) {
         // Arrange
-        when(timeProvider.getCurrentTime()).thenReturn(NOW.minusDays(1));
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
 
         // Act + Assert
         assertThatThrownBy(() ->
@@ -138,11 +137,10 @@ class BookingSystemTest {
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Sluttid måste vara efter starttid");
     }
-    // Arrange
     static Stream<Arguments> invalidTimeRanges() {
         return Stream.of(
                 Arguments.of(NOW.plusDays(2), NOW.plusDays(1)),
-                Arguments.of(NOW.plusHours(1), NOW)
+                Arguments.of(NOW.plusHours(2), NOW.plusHours(1))
         );
     }
 
