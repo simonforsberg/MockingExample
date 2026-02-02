@@ -295,6 +295,20 @@ class BookingSystemTest {
         );
     }
 
+    @Test
+    @DisplayName("getAvailableRooms kastar exception när endTime är före startTime")
+    void getAvailableRooms_shouldThrowException_whenEndTimeIsBeforeStartTime() {
+        // Arrange
+        LocalDateTime start = NOW.plusDays(2);
+        LocalDateTime end = NOW.plusDays(1);
+
+        // Act & Assert
+        assertThatThrownBy(() ->
+                bookingSystem.getAvailableRooms(start, end)
+        )
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Sluttid måste vara efter starttid");
+    }
 
     // ------------------------
     // tester för cancelBooking
