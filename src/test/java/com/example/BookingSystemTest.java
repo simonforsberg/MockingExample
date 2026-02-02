@@ -212,7 +212,24 @@ class BookingSystemTest {
         verify(notificationService).sendCancellationConfirmation(any(Booking.class));
     }
 
-    // TODO: cancelBooking misslyckas när framtida bokning inte finns
+    @Test
+    @DisplayName("cancelBooking returnerar false när framtida bokning inte finns")
+    void cancelBooking_shouldReturnFalse_whenBookingDoesNotExist() throws NotificationException {
+        // Arrange
+        Room room = new Room("room01", "Dubbelrum");
+
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+
+        // Act
+        boolean result = bookingSystem.cancelBooking("non-existent booking");
+
+        // Assert
+        assertThat(result).isFalse();
+
+        verify(roomRepository, never()).save(any());
+        verify(notificationService, never()).sendCancellationConfirmation(any());
+    }
+
 
     // TODO: cancelBooking misslyckas när bokningen pågår eller redan passerat
 
