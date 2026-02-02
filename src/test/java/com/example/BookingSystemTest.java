@@ -112,7 +112,7 @@ class BookingSystemTest {
 
     @ParameterizedTest(name = "roomId={0}, startTime={1}, endTime={2}")
     @MethodSource("invalidBookingInputs")
-    @DisplayName("bookRoom kastar exception vid ogiltiga null-värden")
+    @DisplayName("bookRoom kastar exception vid null-värden")
     void bookRoom_shouldThrowException_whenInputIsNull(String roomId, LocalDateTime startTime, LocalDateTime endTime) {
         // Act + Assert
         assertThatThrownBy(() ->
@@ -218,17 +218,36 @@ class BookingSystemTest {
         // Assert
         assertThat(availableRooms)
                 .hasSize(3)
-                .contains(room1, room2, room3);
+                .containsExactlyInAnyOrder(room1, room2, room3);
     }
 
-    // TODO: några rum är bokade
     @Test
+    @DisplayName("getAvailableRooms returnerar lediga rum")
     void getAvailableRooms_shouldReturnAvailableRooms_whenSomeRoomsAreBooked() {
         // Arrange
+        LocalDateTime startTime = NOW.plusDays(1).withHour(15);
+        LocalDateTime endTime = NOW.plusDays(2).withHour(11);
+
+        Room availableRoom1 = new Room("room01", "Dubbelrum"); // Ledigt
+
+        Room  availableRoom2 = new Room("room02", "Dubbelrum"); // Ledigt efter önskad tid
+        availableRoom2.addBooking(new Booking("booking02", "room02", NOW.plusDays(2).withHour(12), NOW.plusDays(3).withHour(11)));
+
+        Room bookedRoom = new Room("room03", "Enkelrum"); // Bokat under önskad tid
+        bookedRoom.addBooking(new Booking("booking03", "room03", NOW.plusDays(1).withHour(15), NOW.plusDays(3).withHour(11)));
+
+        when(roomRepository.findAll()).thenReturn(
+                List.of(availableRoom1, availableRoom2, bookedRoom)
+        );
 
         // Act
+        List<Room> availableRooms = bookingSystem.getAvailableRooms(startTime, endTime);
 
         // Assert
+        assertThat(availableRooms)
+                .hasSize(2)
+                .containsExactlyInAnyOrder(availableRoom1, availableRoom2)
+                .doesNotContain(bookedRoom);
     }
 
     @Test
