@@ -114,6 +114,8 @@ class BookingSystemTest {
                 bookingSystem.bookRoom(roomId, startTime, endTime)
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Bokning kräver giltiga");
+
+        verifyNoInteractions(roomRepository, notificationService);
     }
     static Stream<Arguments> invalidBookingInputs() {
         return Stream.of(
@@ -135,6 +137,8 @@ class BookingSystemTest {
                 bookingSystem.bookRoom("room01", startTime, endTime)
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Sluttid måste vara efter starttid");
+
+        verifyNoInteractions(roomRepository, notificationService);
     }
     static Stream<Arguments> invalidTimeRanges() {
         return Stream.of(
