@@ -118,6 +118,7 @@ class BookingSystemTest {
 
         verifyNoInteractions(roomRepository, notificationService);
     }
+
     static Stream<Arguments> invalidBookingInputs() {
         return Stream.of(
                 Arguments.of(null, NOW.plusDays(1), NOW.plusDays(2)),
@@ -141,6 +142,7 @@ class BookingSystemTest {
 
         verifyNoInteractions(roomRepository, notificationService);
     }
+
     static Stream<Arguments> invalidTimeRanges() {
         return Stream.of(
                 Arguments.of(NOW.plusDays(2), NOW.plusDays(1)),
@@ -230,8 +232,24 @@ class BookingSystemTest {
         verify(notificationService, never()).sendCancellationConfirmation(any());
     }
 
+    @Test
+    @DisplayName("cancelBooking returnerar false när en bokning pågår eller passerat")
+    void cancelBooking_shouldReturnFalse_whenBookingHasStarted() {
+        // Arrange
+        String bookingId = "booking01";
+        String roomId = "room01";
+        Room room = new Room(roomId, "Dubbelrum");
+        room.addBooking(new Booking(bookingId, roomId, NOW.minusHours(1), NOW.plusDays(1)));
 
-    // TODO: cancelBooking misslyckas när bokningen pågår eller redan passerat
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
 
+        // Act + Assert
+        assertThatThrownBy(() -> bookingSystem.cancelBooking(bookingId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Kan inte avboka påbörjad eller avslutad bokning");
+
+        verify(roomRepository, never()).save(any());
+    }
 
 }
