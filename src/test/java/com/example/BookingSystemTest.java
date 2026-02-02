@@ -102,6 +102,8 @@ class BookingSystemTest {
                 bookingSystem.bookRoom(roomId, beforeNow, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Kan inte boka tid i dåtid");
+
+        verifyNoInteractions(roomRepository, notificationService);
     }
 
     @ParameterizedTest(name = "roomId={0}, startTime={1}, endTime={2}")
