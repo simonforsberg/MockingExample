@@ -199,7 +199,6 @@ class BookingSystemTest {
     // tester för getAvailableRooms
     // ----------------------------
 
-    // TODO: inget rum är bokat
     @Test
     @DisplayName("getAvailableRooms returnerar alla rum när inga är bokade")
     void getAvailableRooms_shouldReturnAllRooms_whenNoRoomsAreBooked() {
@@ -232,16 +231,30 @@ class BookingSystemTest {
         // Assert
     }
 
-    // TODO: inga rum är obokade/alla rum är bokade
     @Test
+    @DisplayName("getAvailableRooms returnerar inga rum när alla är bokade")
     void getAvailableRooms_shouldReturnNoRooms_whenAllRoomsAreBooked() {
         // Arrange
+        LocalDateTime startTime = NOW.plusDays(1);
+        LocalDateTime endTime = NOW.plusDays(2);
+
+        Room bookedRoom1 = new Room("room01", "Dubbelrum");
+        bookedRoom1.addBooking(new Booking("booking01", "room01", startTime, endTime));
+
+        Room bookedRoom2 = new Room("room02", "Dubbelrum");
+        bookedRoom2.addBooking(new Booking("booking02", "room02", startTime, endTime));
+
+        Room bookedRoom3 = new Room("room03", "Enkelrum");
+        bookedRoom3.addBooking(new Booking("booking03", "room03", startTime, endTime));
+
+        when(roomRepository.findAll()).thenReturn(List.of(bookedRoom1, bookedRoom2, bookedRoom3));
 
         // Act
+        List<Room> availableRooms = bookingSystem.getAvailableRooms(startTime, endTime);
 
         // Assert
+        assertThat(availableRooms).isEmpty();
     }
-
 
     // ------------------------
     // tester för cancelBooking
