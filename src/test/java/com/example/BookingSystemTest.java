@@ -263,4 +263,30 @@ class BookingSystemTest {
         verifyNoInteractions(roomRepository, notificationService);
     }
 
+    @Test
+    @DisplayName("cancelBooking lyckas även när notifiering misslyckas")
+    void cancelBooking_shouldSucceed_whenNotificationFails() throws NotificationException {
+        // Arrange
+        String roomId = "room01";
+        String bookingId = "booking01";
+        Room room = new Room(roomId, "Dubbelrum");
+        room.addBooking(new Booking(bookingId, roomId, NOW.plusDays(1), NOW.plusDays(2)));
+
+        when(timeProvider.getCurrentTime()).thenReturn(NOW);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+
+        doThrow(new NotificationException("Notifiering misslyckades"))
+                .when(notificationService)
+                .sendCancellationConfirmation(any(Booking.class));
+
+        // Act
+        boolean result = bookingSystem.cancelBooking(bookingId);
+
+        // Assert
+        assertThat(result).isTrue();
+        assertThat(room.hasBooking(bookingId)).isFalse();
+
+        verify(roomRepository).save(room);
+    }
+
 }
