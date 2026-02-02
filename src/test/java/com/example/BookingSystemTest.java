@@ -104,4 +104,25 @@ class BookingSystemTest {
                 .hasMessage("Kan inte boka tid i dåtid");
     }
 
+    @ParameterizedTest(name = "roomId={0}, startTime={1}, endTime={2}")
+    @MethodSource("invalidBookingInputs")
+    @DisplayName("bookRoom kastar exception vid ogiltiga null-värden")
+    void bookRoom_shouldThrowException_whenInputIsNull(String roomId, LocalDateTime startTime, LocalDateTime endTime) {
+        // Act + Assert
+        assertThatThrownBy(() ->
+                bookingSystem.bookRoom(roomId, startTime, endTime)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Bokning kräver giltiga");
+    }
+
+    // Arrange
+    static Stream<Arguments> invalidBookingInputs() {
+        return Stream.of(
+                Arguments.of(null, NOW.plusDays(1), NOW.plusDays(2)),
+                Arguments.of("room01", null, NOW.plusDays(2)),
+                Arguments.of("room01", NOW.plusDays(1), null)
+        );
+    }
+
+
 }
