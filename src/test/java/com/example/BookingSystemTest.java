@@ -275,6 +275,27 @@ class BookingSystemTest {
         assertThat(availableRooms).isEmpty();
     }
 
+    @ParameterizedTest(name = "startTime={0}, endTime={1}")
+    @MethodSource("nullTimeInputs")
+    @DisplayName("getAvailableRooms kastar exception vid null-värden")
+    void getAvailableRooms_shouldThrowException_whenTimeIsNull(LocalDateTime startTime, LocalDateTime endTime) {
+        // Act & Assert
+        assertThatThrownBy(() ->
+                bookingSystem.getAvailableRooms(startTime, endTime)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Måste ange både start- och sluttid");
+
+        verifyNoInteractions(roomRepository);
+    }
+
+    static Stream<Arguments> nullTimeInputs() {
+        return Stream.of(
+                Arguments.of(null, NOW.plusDays(1)),
+                Arguments.of(NOW.plusDays(1), null)
+        );
+    }
+
+
     // ------------------------
     // tester för cancelBooking
     // ------------------------
