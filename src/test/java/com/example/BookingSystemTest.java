@@ -41,6 +41,10 @@ class BookingSystemTest {
     private static final LocalDateTime NOW =
             LocalDateTime.of(2026, 1, 29, 9, 0);
 
+    // -------------------
+    // tester för bookRoom
+    // -------------------
+
     @Test
     @DisplayName("bookRoom returnerar true när rummet är ledigt")
     void bookRoom_shouldReturnTrue_whenRoomIsAvailable() throws NotificationException {
@@ -190,6 +194,58 @@ class BookingSystemTest {
 
         verify(roomRepository).save(room);
     }
+
+    // ----------------------------
+    // tester för getAvailableRooms
+    // ----------------------------
+
+    // TODO: inget rum är bokat
+    @Test
+    @DisplayName("getAvailableRooms returnerar alla rum när inga är bokade")
+    void getAvailableRooms_shouldReturnAllRooms_whenNoRoomsAreBooked() {
+        // Arrange
+        Room room1 = new Room("room01", "Dubbelrum");
+        Room room2 = new Room("room02", "Dubbelrum");
+        Room room3 = new Room("room03", "Enkelrum");
+
+        LocalDateTime startTime = NOW.plusDays(1);
+        LocalDateTime endTime = NOW.plusDays(2);
+
+        when(roomRepository.findAll()).thenReturn(List.of(room1, room2, room3));
+
+        // Act
+        List<Room> availableRooms = bookingSystem.getAvailableRooms(startTime, endTime);
+
+        // Assert
+        assertThat(availableRooms)
+                .hasSize(3)
+                .contains(room1, room2, room3);
+    }
+
+    // TODO: några rum är bokade
+    @Test
+    void getAvailableRooms_shouldReturnAvailableRooms_whenSomeRoomsAreBooked() {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    // TODO: inga rum är obokade/alla rum är bokade
+    @Test
+    void getAvailableRooms_shouldReturnNoRooms_whenAllRoomsAreBooked() {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+
+    // ------------------------
+    // tester för cancelBooking
+    // ------------------------
 
     @Test
     @DisplayName("cancelBooking returnerar true när framtida bokning finns")
