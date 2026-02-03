@@ -21,6 +21,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link BookingSystem}.
+ * <p>
+ * Uses Mockito to create test doubles for dependencies.
+ * Tests are organized by method using nested classes.
+ */
 @ExtendWith(MockitoExtension.class)
 class BookingSystemTest {
 
@@ -39,9 +45,19 @@ class BookingSystemTest {
     private static final LocalDateTime NOW =
             LocalDateTime.of(2026, 1, 29, 9, 0);
 
+    /**
+     * Tests for {@link BookingSystem#bookRoom(String, LocalDateTime, LocalDateTime)}.
+     * <p>
+     * Covers validation, successful bookings, unavailable rooms, and error handling.
+     */
     @Nested
     @DisplayName("bookRoom() test suite")
     class BookRoomTests {
+
+        /**
+         * Verifies that booking an available room returns true
+         * and triggers both repository save and notification.
+         */
         @Test
         @DisplayName("bookRoom returnerar true när rummet är ledigt")
         void bookRoom_shouldReturnTrue_whenRoomIsAvailable() throws NotificationException {
@@ -64,6 +80,10 @@ class BookingSystemTest {
             verify(notificationService).sendBookingConfirmation(any(Booking.class));
         }
 
+        /**
+         * Verifies that booking an unavailable room returns false
+         * without saving or sending notifications.
+         */
         @Test
         @DisplayName("bookRoom returnerar false när rummet inte är ledigt")
         void bookRoom_shouldReturnFalse_whenRoomIsNotAvailable() throws NotificationException {
@@ -88,6 +108,9 @@ class BookingSystemTest {
             verify(notificationService, never()).sendBookingConfirmation(any());
         }
 
+        /**
+         * Verifies that attempting to book a time in the past throws {@link IllegalArgumentException}.
+         */
         @Test
         @DisplayName("bookRoom kastar exception om starttid är före nutid")
         void bookRoom_shouldThrowException_whenStartTimeIsBeforeNow() {
@@ -107,6 +130,11 @@ class BookingSystemTest {
             verifyNoInteractions(roomRepository, notificationService);
         }
 
+        /**
+         * Verifies that null input values throw {@link IllegalArgumentException}.
+         * <p>
+         * Tests three scenarios: null roomId, null startTime, and null endTime.
+         */
         @ParameterizedTest(name = "roomId={0}, startTime={1}, endTime={2}")
         @MethodSource("invalidBookingInputs")
         @DisplayName("bookRoom kastar exception vid null-värden")
@@ -120,6 +148,9 @@ class BookingSystemTest {
             verifyNoInteractions(roomRepository, notificationService);
         }
 
+        /**
+         * Provides test data for null input validation.
+         */
         static Stream<Arguments> invalidBookingInputs() {
             return Stream.of(
                     Arguments.of(null, NOW.plusDays(1), NOW.plusDays(2)),
@@ -128,6 +159,11 @@ class BookingSystemTest {
             );
         }
 
+        /**
+         * Verifies that an end time before start time throws {@link IllegalArgumentException}.
+         * <p>
+         * Tests multiple invalid time ranges.
+         */
         @ParameterizedTest(name = "start={0}, end={1}")
         @MethodSource("invalidTimeRanges")
         @DisplayName("bookRoom kastar exception när sluttid är före starttid")
@@ -151,6 +187,9 @@ class BookingSystemTest {
             );
         }
 
+        /**
+         * Verifies that attempting to book a non-existent room throw {@link IllegalArgumentException}.
+         */
         @Test
         @DisplayName("bookRoom kastar exception när rummet inte finns")
         void bookRoom_shouldThrowException_whenRoomDoesNotExist() {
@@ -169,6 +208,11 @@ class BookingSystemTest {
             verifyNoInteractions(notificationService);
         }
 
+        /**
+         * Verifies that booking succeeds even when notification fails.
+         * <p>
+         * Tests the resilience of the system - booking is saved despite notification errors.
+         */
         @Test
         @DisplayName("bookRoom lyckas även när notifiering misslyckas")
         void bookRoom_shouldSucceed_whenNotificationFails() throws NotificationException {
@@ -193,9 +237,18 @@ class BookingSystemTest {
         }
     }
 
+    /**
+     * Tests for {@link BookingSystem#getAvailableRooms(LocalDateTime, LocalDateTime)}.
+     * <p>
+     * Covers filtering logic, empty results, and validation.
+     */
     @Nested
     @DisplayName("getAvailableRooms() test suite")
     class GetAvailableRoomsTests {
+
+        /**
+         * Verifies that all rooms are returned when none have bookings in the requested time range.
+         */
         @Test
         @DisplayName("getAvailableRooms returnerar alla rum när inga är bokade")
         void getAvailableRooms_shouldReturnAllRooms_whenNoRoomsAreBooked() {
@@ -218,6 +271,12 @@ class BookingSystemTest {
                     .containsExactlyInAnyOrder(room1, room2, room3);
         }
 
+        /**
+         * Verifies that only available rooms are returned when some rooms are booked.
+         * <p>
+         * Tests filtering logic with rooms that have no bookings, non-overlapping bookings,
+         * and overlapping bookings.
+         */
         @Test
         @DisplayName("getAvailableRooms returnerar lediga rum")
         void getAvailableRooms_shouldReturnAvailableRooms_whenSomeRoomsAreBooked() {
@@ -247,6 +306,9 @@ class BookingSystemTest {
                     .doesNotContain(bookedRoom);
         }
 
+        /**
+         * Verifies that an empty list is returned when all rooms are booked.
+         */
         @Test
         @DisplayName("getAvailableRooms returnerar inga rum när alla är bokade")
         void getAvailableRooms_shouldReturnNoRooms_whenAllRoomsAreBooked() {
@@ -272,6 +334,11 @@ class BookingSystemTest {
             assertThat(availableRooms).isEmpty();
         }
 
+        /**
+         * Verifies that null time values throw {@link IllegalArgumentException}.
+         * <p>
+         * Tests both null startTime and null endTime.
+         */
         @ParameterizedTest(name = "startTime={0}, endTime={1}")
         @MethodSource("nullTimeInputs")
         @DisplayName("getAvailableRooms kastar exception vid null-värden")
@@ -285,6 +352,9 @@ class BookingSystemTest {
             verifyNoInteractions(roomRepository);
         }
 
+        /**
+         * Provides test data for null time validation.
+         */
         static Stream<Arguments> nullTimeInputs() {
             return Stream.of(
                     Arguments.of(null, NOW.plusDays(1)),
@@ -292,6 +362,9 @@ class BookingSystemTest {
             );
         }
 
+        /**
+         * Verifies that an end time before start time throws {@link IllegalArgumentException}.
+         */
         @Test
         @DisplayName("getAvailableRooms kastar exception när endTime är före startTime")
         void getAvailableRooms_shouldThrowException_whenEndTimeIsBeforeStartTime() {
@@ -310,9 +383,19 @@ class BookingSystemTest {
         }
     }
 
+    /**
+     * Tests for {@link BookingSystem#cancelBooking(String)}.
+     * <p>
+     * Covers successful cancellation, non-existent bookings, validation, and error handling.
+     */
     @Nested
     @DisplayName("cancelBooking() test suite")
     class CancelBookingTests {
+
+        /**
+         * Verifies that cancelling an existing future booking returns true
+         * and triggers both repository save and notification.
+         */
         @Test
         @DisplayName("cancelBooking returnerar true när framtida bokning finns")
         void cancelBooking_shouldReturnTrue_whenBookingExists() throws NotificationException {
@@ -336,6 +419,10 @@ class BookingSystemTest {
             verify(notificationService).sendCancellationConfirmation(any(Booking.class));
         }
 
+        /**
+         * Verifies that attempting to cancel a non-existent booking returns false
+         * without triggering save or notification.
+         */
         @Test
         @DisplayName("cancelBooking returnerar false när framtida bokning inte finns")
         void cancelBooking_shouldReturnFalse_whenBookingDoesNotExist() throws NotificationException {
@@ -354,8 +441,11 @@ class BookingSystemTest {
             verify(notificationService, never()).sendCancellationConfirmation(any());
         }
 
+        /**
+         * Verifies that attempting to cancel a started or completed booking throws {@link IllegalStateException}.
+         */
         @Test
-        @DisplayName("cancelBooking kastar exeption när en bokning pågår eller passerat")
+        @DisplayName("cancelBooking kastar exception när en bokning pågår eller passerat")
         void cancelBooking_shouldThrowException_whenBookingHasStarted() {
             // Arrange
             String bookingId = "booking01";
@@ -374,6 +464,9 @@ class BookingSystemTest {
             verify(roomRepository, never()).save(any());
         }
 
+        /**
+         * Verifies that a null booking ID throws {@link IllegalArgumentException}.
+         */
         @Test
         @DisplayName("cancelBooking kastar exception när boknings-ID är null")
         void cancelBooking_shouldThrowException_whenBookingIdIsNull() {
@@ -385,6 +478,11 @@ class BookingSystemTest {
             verifyNoInteractions(roomRepository, notificationService);
         }
 
+        /**
+         * Verifies that cancellation succeeds even when notification fails.
+         * <p>
+         * Tests the resilience of the system - cancellation is saved despite notification errors.
+         */
         @Test
         @DisplayName("cancelBooking lyckas även när notifiering misslyckas")
         void cancelBooking_shouldSucceed_whenNotificationFails() throws NotificationException {
