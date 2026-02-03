@@ -305,6 +305,8 @@ class BookingSystemTest {
             )
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("Sluttid måste vara efter starttid");
+
+            verifyNoInteractions(roomRepository);
         }
     }
 
