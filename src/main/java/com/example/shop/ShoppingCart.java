@@ -20,4 +20,8 @@ public class ShoppingCart {
     public int getItemCount() {
         return items.size();
     }
+
+    public void removeItem(Product product) {
+        items.remove(product);
+    }
 }
