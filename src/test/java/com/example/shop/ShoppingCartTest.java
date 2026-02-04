@@ -65,4 +65,16 @@ class ShoppingCartTest {
         assertThat(cart.getItemCount()).isEqualTo(3);
     }
 
+    @Test
+    void removeItem_shouldDecreaseItemCount() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        cart.addItem(hat);
+        // Act
+        cart.removeItem(hat);
+        // Assert
+        assertThat(cart.getItemCount()).isEqualTo(1);
+    }
+
 }
