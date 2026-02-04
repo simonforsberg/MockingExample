@@ -23,6 +23,14 @@ class ShoppingCartTest {
     }
 
     @Test
+    void newCart_shouldHaveZeroTotal() {
+        // Act
+        double total = cart.getTotalPrice();
+        // Assert
+        assertThat(total).isZero();
+    }
+
+    @Test
     void addItem_shouldUpdateTotalPrice() {
         // Act
         cart.addItem("Keps", 200.0);
