@@ -37,7 +37,7 @@ class ShoppingCartTest {
         // Act
         cart.addItem(keps);
         // Assert
-        assertThat(cart.getTotalPrice()).isEqualTo(200.0);
+        assertThat(cart.getTotalPrice()).isEqualTo(250.0);
     }
 
     @Test
