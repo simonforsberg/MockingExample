@@ -5,21 +5,19 @@ import java.util.List;
 
 public class ShoppingCart {
 
-    private double totalPrice = 0.0;
-    private int itemCount = 0;
     private final List<Product> items = new ArrayList<>();
 
     public void addItem(Product product) {
         items.add(product);
-        totalPrice += product.getPrice();
-        itemCount++;
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        return items.stream()
+                .mapToDouble(Product::getPrice)
+                .sum();
     }
 
     public int getItemCount() {
-        return itemCount;
+        return items.size();
     }
 }
