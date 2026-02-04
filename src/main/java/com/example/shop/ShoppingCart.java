@@ -3,9 +3,11 @@ package com.example.shop;
 public class ShoppingCart {
 
     private int totalPrice = 0;
+    private int itemCount = 0;
 
     public void addItem(String name, int price) {
         totalPrice += price;
+        itemCount++;
     }
 
     public int getTotalPrice() {
@@ -13,6 +15,6 @@ public class ShoppingCart {
     }
 
     public int getItemCount() {
-        return 0;
+        return itemCount;
     }
 }
