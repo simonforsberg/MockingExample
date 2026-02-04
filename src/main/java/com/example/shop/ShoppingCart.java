@@ -6,15 +6,17 @@ import java.util.List;
 public class ShoppingCart {
 
     private final List<Product> items = new ArrayList<>();
+    private double discount = 0.0;
 
     public void addItem(Product product) {
         items.add(product);
     }
 
     public double getTotalPrice() {
-        return items.stream()
+        double sum = items.stream()
                 .mapToDouble(Product::getPrice)
                 .sum();
+        return sum * (1 - discount);
     }
 
     public int getItemCount() {
@@ -23,5 +25,9 @@ public class ShoppingCart {
 
     public void removeItem(Product product) {
         items.remove(product);
+    }
+
+    public void applyDiscount(double discount) {
+        this.discount = discount;
     }
 }
