@@ -33,7 +33,7 @@ class ShoppingCartTest {
     @Test
     void addItem_shouldUpdateTotalPrice() {
         // Arrange
-        Product keps = new Product("Keps", 200.0);
+        Product keps = new Product("Hat", 250.0);
         // Act
         cart.addItem(keps);
         // Assert
@@ -43,7 +43,7 @@ class ShoppingCartTest {
     @Test
     void addItem_shouldIncreaseItemCount() {
         // Arrange
-        Product keps = new Product("Keps", 200.0);
+        Product keps = new Product("Hat", 250.0);
         // Act
         cart.addItem(keps);
         // Assert
@@ -53,7 +53,7 @@ class ShoppingCartTest {
     @Test
     void addMultipleItems_shouldUpdateTotalPriceAndItemCount() {
         // Arrange
-        Product hat = new Product("Hat", 200.0);
+        Product hat = new Product("Hat", 250.0);
         Product pants = new Product("Pants", 700.0);
         Product jacket = new Product("Jacket", 900.0);
         // Act
@@ -61,7 +61,7 @@ class ShoppingCartTest {
         cart.addItem(pants);
         cart.addItem(jacket);
         // Assert
-        assertThat(cart.getTotalPrice()).isEqualTo(1800.0);
+        assertThat(cart.getTotalPrice()).isEqualTo(1850.0);
         assertThat(cart.getItemCount()).isEqualTo(3);
     }
 
