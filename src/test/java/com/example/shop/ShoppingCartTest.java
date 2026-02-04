@@ -26,4 +26,14 @@ class ShoppingCartTest {
         assertThat(cart.getTotalPrice()).isEqualTo(200);
     }
 
+    @Test
+    void addItem_shouldIncreaseItemCount() {
+        // Arrange
+        ShoppingCart cart = new ShoppingCart();
+        // Act
+        cart.addItem("Keps", 200);
+        // Assert
+        assertThat(cart.getItemCount()).isEqualTo(1);
+    }
+
 }
