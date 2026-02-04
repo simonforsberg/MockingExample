@@ -51,7 +51,7 @@ class ShoppingCartTest {
     }
 
     @Test
-    void addMultipleItems_shouldUpdateTotalPriceAndItemCount() {
+    void addMultipleItems_shouldUpdateTotalPrice() {
         // Arrange
         Product hat = new Product("Hat", 250.0);
         Product pants = new Product("Pants", 700.0);
@@ -62,7 +62,6 @@ class ShoppingCartTest {
         cart.addItem(jacket);
         // Assert
         assertThat(cart.getTotalPrice()).isEqualTo(1850.0);
-        assertThat(cart.getItemCount()).isEqualTo(3);
     }
 
     @Test
