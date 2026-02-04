@@ -25,15 +25,15 @@ class ShoppingCartTest {
     @Test
     void addItem_shouldUpdateTotalPrice() {
         // Act
-        cart.addItem("Keps", 200);
+        cart.addItem("Keps", 200.0);
         // Assert
-        assertThat(cart.getTotalPrice()).isEqualTo(200);
+        assertThat(cart.getTotalPrice()).isEqualTo(200.0);
     }
 
     @Test
     void addItem_shouldIncreaseItemCount() {
         // Act
-        cart.addItem("Keps", 200);
+        cart.addItem("Keps", 200.0);
         // Assert
         assertThat(cart.getItemCount()).isEqualTo(1);
     }
