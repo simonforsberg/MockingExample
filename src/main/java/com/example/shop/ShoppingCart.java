@@ -30,6 +30,10 @@ public class ShoppingCart {
         return items.getOrDefault(product, 0);
     }
 
+    public int updateQuantity(Product product, int quantity) {
+        return items.put(product, quantity);
+    }
+
     public boolean removeItem(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
