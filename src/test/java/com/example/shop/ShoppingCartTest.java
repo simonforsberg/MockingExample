@@ -77,6 +77,17 @@ class ShoppingCartTest {
     }
 
     @Test
+    void removeItem_shouldReturnFalse_whenItemNotInCart() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        // Act
+        boolean removed = cart.removeItem(hat);
+        // Assert
+        assertThat(removed).isFalse();
+        assertThat(cart.getItemCount()).isZero();
+    }
+
+    @Test
     void applyDiscount_shouldReduceTotalPrice() {
         // Arrange
         Product hat = new Product("Hat", 250.0);
