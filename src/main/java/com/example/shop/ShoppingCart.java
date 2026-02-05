@@ -1,23 +1,23 @@
 package com.example.shop;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShoppingCart {
 
-    private final List<Product> items = new ArrayList<>();
+    private final Map<Product, Integer> items = new HashMap<>();
     private double discount = 0.0;
 
     public void addItem(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        items.add(product);
+        items.put(product, items.getOrDefault(product, 0) + 1);
     }
 
     public double getTotalPrice() {
-        double sum = items.stream()
-                .mapToDouble(Product::getPrice)
+        double sum = items.entrySet().stream()
+                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
                 .sum();
         return sum * (1 - discount);
     }
@@ -26,11 +26,24 @@ public class ShoppingCart {
         return items.size();
     }
 
+    public int getQuantity(Product product) {
+        return items.getOrDefault(product, 0);
+    }
+
     public boolean removeItem(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        return items.remove(product);
+        if (!items.containsKey(product)) {
+            return false;
+        }
+        int currentQuantity = items.get(product);
+        if (currentQuantity > 1) {
+            items.put(product, currentQuantity - 1);
+        } else {
+            items.remove(product);
+        }
+        return true;
     }
 
     public void applyDiscount(double discount) {
