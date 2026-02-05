@@ -103,7 +103,7 @@ public class ShoppingCart {
      */
     public double getTotalPrice() {
         double sum = items.entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
+                .mapToDouble(entry -> entry.getKey().price() * entry.getValue())
                 .sum();
         return sum * (1 - discount);
     }
