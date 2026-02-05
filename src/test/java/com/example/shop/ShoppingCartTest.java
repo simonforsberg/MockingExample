@@ -307,4 +307,15 @@ class ShoppingCartTest {
                 .hasMessage("Product cannot be null");
     }
 
+    @Test
+    void updateQuantity_shouldThrowException_whenQuantityIsNegative() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        // Act & Assert
+        assertThatThrownBy(() -> cart.updateQuantity(hat, -1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Quantity cannot be negative");
+    }
+
 }
