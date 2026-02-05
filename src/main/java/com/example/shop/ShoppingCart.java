@@ -34,6 +34,9 @@ public class ShoppingCart {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
         if (quantity == 0) {
             items.remove(product);
         } else {
