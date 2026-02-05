@@ -192,4 +192,14 @@ class ShoppingCartTest {
         assertThat(hat1).hasSameHashCodeAs(hat2);
     }
 
+    @Test
+    void twoProducts_shouldNotBeEqual_whenNamesDiffer() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        Product tshirt = new Product("T-shirt", 250.0);
+
+        // Assert
+        assertThat(hat).isNotEqualTo(tshirt);
+    }
+
 }
