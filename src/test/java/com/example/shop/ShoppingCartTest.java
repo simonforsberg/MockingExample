@@ -299,4 +299,12 @@ class ShoppingCartTest {
         assertThat(cart.getQuantity(hat)).isZero();
     }
 
+    @Test
+    void updateQuantity_shouldThrowException_whenProductIsNull() {
+        // Act & Assert
+        assertThatThrownBy(() -> cart.updateQuantity(null, 4))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product cannot be null");
+    }
+
 }
