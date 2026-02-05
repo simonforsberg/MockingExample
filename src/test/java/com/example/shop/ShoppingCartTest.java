@@ -92,6 +92,21 @@ class ShoppingCartTest {
     }
 
     @Test
+    void removeItem_shouldDecreaseQuantity_whenQuantityGreaterThanOne() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        cart.addItem(hat);
+        cart.addItem(hat);
+        // Act
+        cart.removeItem(hat);
+        // Assert
+        assertThat(cart.getItemCount()).isEqualTo(1);
+        assertThat(cart.getQuantity(hat)).isEqualTo(2);
+        assertThat(cart.getTotalPrice()).isEqualTo(500.0);
+    }
+
+    @Test
     void removeItem_shouldUpdateTotalPrice() {
         // Arrange
         Product hat = new Product("Hat", 250.0);
