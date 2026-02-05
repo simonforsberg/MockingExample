@@ -197,9 +197,17 @@ class ShoppingCartTest {
         // Arrange
         Product hat = new Product("Hat", 250.0);
         Product tshirt = new Product("T-shirt", 250.0);
-
         // Assert
         assertThat(hat).isNotEqualTo(tshirt);
+    }
+
+    @Test
+    void twoProducts_shouldNotBeEqual_whenPricesDiffer() {
+        // Arrange
+        Product hat1 = new Product("Hat", 250.0);
+        Product hat2 = new Product("Hat", 350.0);
+        // Assert
+        assertThat(hat1).isNotEqualTo(hat2);
     }
 
 }
