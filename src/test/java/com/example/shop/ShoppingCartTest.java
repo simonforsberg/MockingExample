@@ -144,4 +144,12 @@ class ShoppingCartTest {
                 .hasMessage("Product name cannot be null or blank");
     }
 
+    @Test
+    void newProduct_shouldThrowException_whenPriceIsNegative() {
+        // Act + Assert
+        assertThatThrownBy(() -> new Product("Hat", -250.0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Price cannot be negative");
+    }
+
 }
