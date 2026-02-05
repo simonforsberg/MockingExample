@@ -182,4 +182,14 @@ class ShoppingCartTest {
                 .hasMessage("Price cannot be negative");
     }
 
+    @Test
+    void twoProducts_shouldBeEqual_whenNameAndPriceAreSame() {
+        // Arrange
+        Product hat1 = new Product("Hat", 250.0);
+        Product hat2 = new Product("Hat", 250.0);
+        // Assert
+        assertThat(hat1).isEqualTo(hat2);
+        assertThat(hat1).hasSameHashCodeAs(hat2);
+    }
+
 }
