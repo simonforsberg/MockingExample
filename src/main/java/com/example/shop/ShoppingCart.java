@@ -24,6 +24,9 @@ public class ShoppingCart {
     }
 
     public boolean removeItem(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         return items.remove(product);
     }
 
