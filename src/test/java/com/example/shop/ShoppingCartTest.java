@@ -66,6 +66,14 @@ class ShoppingCartTest {
     }
 
     @Test
+    void addItem_shouldThrowException_whenProductIsNull() {
+        // Act + Assert
+        assertThatThrownBy(() -> cart.addItem(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product cannot be null");
+    }
+
+    @Test
     void removeItem_shouldDecreaseItemCount() {
         // Arrange
         Product hat = new Product("Hat", 250.0);
