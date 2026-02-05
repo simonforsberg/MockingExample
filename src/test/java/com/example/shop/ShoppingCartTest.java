@@ -236,4 +236,14 @@ class ShoppingCartTest {
         assertThat(quantity).isEqualTo(3);
     }
 
+    @Test
+    void getQuantity_shouldReturnZero_whenItemNotInCart() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        // Act
+        int quantity = cart.getQuantity(hat);
+        // Assert
+        assertThat(quantity).isZero();
+    }
+
 }
