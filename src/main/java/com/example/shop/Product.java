@@ -5,6 +5,9 @@ public class Product {
     private final double price;
 
     public Product(String name, double price) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be null or blank");
+        }
         this.name = name;
         this.price = price;
     }
