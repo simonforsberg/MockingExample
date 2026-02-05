@@ -37,6 +37,9 @@ public class ShoppingCart {
         if (discount > 1) {
             throw new IllegalArgumentException("Discount cannot be greater than 100%");
         }
+        if (discount < 0) {
+            throw new IllegalArgumentException("Discount cannot be negative");
+        }
         this.discount = discount;
     }
 }
