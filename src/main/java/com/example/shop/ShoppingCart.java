@@ -92,6 +92,9 @@ public class ShoppingCart {
     }
 
     public int getQuantity(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         return items.getOrDefault(product, 0);
     }
 
