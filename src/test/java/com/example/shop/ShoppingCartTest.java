@@ -107,6 +107,19 @@ class ShoppingCartTest {
     }
 
     @Test
+    void removeItem_shouldRemoveItemFromCart_whenQuantityIsOne() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        // Act
+        boolean removed = cart.removeItem(hat);
+        // Assert
+        assertThat(removed).isTrue();
+        assertThat(cart.getItemCount()).isZero();
+        assertThat(cart.getQuantity(hat)).isZero();
+    }
+
+    @Test
     void removeItem_shouldUpdateTotalPrice() {
         // Arrange
         Product hat = new Product("Hat", 250.0);
