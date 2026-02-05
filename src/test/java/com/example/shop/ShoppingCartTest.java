@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShoppingCartTest {
 
@@ -98,6 +99,14 @@ class ShoppingCartTest {
         // Assert
         assertThat(removed).isFalse();
         assertThat(cart.getItemCount()).isZero();
+    }
+
+    @Test
+    void removeItem_shouldThrowException_whenProductIsNull() {
+        // Act + Assert
+        assertThatThrownBy(() -> cart.removeItem(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product cannot be null");
     }
 
     @Test
