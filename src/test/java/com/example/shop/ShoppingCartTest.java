@@ -88,6 +88,7 @@ class ShoppingCartTest {
         cart.removeItem(hat);
         // Assert
         assertThat(cart.getItemCount()).isEqualTo(1);
+        assertThat(cart.getQuantity(hat)).isEqualTo(1);
     }
 
     @Test
