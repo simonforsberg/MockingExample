@@ -75,4 +75,10 @@ public class ShoppingCart {
         }
         this.discount = discount;
     }
+
+    public void clear() {
+        items.clear();
+        discount = 0.0;
+    }
+
 }
