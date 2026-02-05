@@ -9,6 +9,9 @@ public class ShoppingCart {
     private double discount = 0.0;
 
     public void addItem(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         items.add(product);
     }
 
