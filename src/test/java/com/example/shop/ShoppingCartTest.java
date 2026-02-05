@@ -129,6 +129,13 @@ class ShoppingCartTest {
     }
 
     @Test
+    void applyDiscount_shouldThrowException_whenDiscountIsGreaterThan100Percent() {
+        assertThatThrownBy(() -> cart.applyDiscount(1.1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Discount cannot be greater than 100%");
+    }
+
+    @Test
     void newProduct_shouldThrowException_whenNameIsNull() {
         // Act + Assert
         assertThatThrownBy(() -> new Product(null, 100.0))
