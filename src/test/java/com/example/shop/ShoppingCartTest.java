@@ -275,4 +275,16 @@ class ShoppingCartTest {
         assertThat(quantity).isZero();
     }
 
+    @Test
+    void updateQuantity_shouldSetNewQuantity() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        // Act
+        cart.updateQuantity(hat, 4);
+        // Assert
+        assertThat(cart.getQuantity(hat)).isEqualTo(4);
+        assertThat(cart.getTotalPrice()).isEqualTo(1000.0);
+    }
+
 }
