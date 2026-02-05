@@ -31,6 +31,9 @@ public class ShoppingCart {
     }
 
     public void updateQuantity(Product product, int quantity) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         if (quantity == 0) {
             items.remove(product);
         } else {
