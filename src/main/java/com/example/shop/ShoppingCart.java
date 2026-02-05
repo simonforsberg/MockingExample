@@ -26,6 +26,12 @@ public class ShoppingCart {
         return items.size();
     }
 
+    public int getTotalItems() {
+        return items.values().stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
     public int getQuantity(Product product) {
         return items.getOrDefault(product, 0);
     }
