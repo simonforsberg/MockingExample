@@ -283,6 +283,14 @@ class ShoppingCartTest {
             // Assert
             assertThat(quantity).isZero();
         }
+
+        @Test
+        void getQuantity_shouldThrowException_whenProductIsNull() {
+            // Act + Assert
+            assertThatThrownBy(() -> cart.getQuantity(null))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Product cannot be null");
+        }
     }
 
     /**
