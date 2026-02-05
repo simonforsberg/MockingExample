@@ -2,6 +2,11 @@ package com.example.shop;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -117,37 +122,24 @@ class ShoppingCartTest {
                 .hasMessage("Product cannot be null");
     }
 
-    @Test
-    void applyDiscount_shouldReduceTotalPrice() {
+    @ParameterizedTest(name = "discount={0} -> expectedTotal={1}")
+    @MethodSource("discountCases")
+    void applyDiscount_shouldCalculateCorrectTotal(double discount, double expectedTotal) {
         // Arrange
         Product hat = new Product("Hat", 250.0);
         cart.addItem(hat);
         // Act
-        cart.applyDiscount(0.20);
+        cart.applyDiscount(discount);
         // Assert
-        assertThat(cart.getTotalPrice()).isEqualTo(200.0);
+        assertThat(cart.getTotalPrice()).isEqualTo(expectedTotal);
     }
 
-    @Test
-    void applyDiscount_shouldNotChangeTotal_whenNoDiscountApplied() {
-        // Arrange
-        Product hat = new Product("Hat", 250.0);
-        cart.addItem(hat);
-        // Act
-        cart.applyDiscount(0.0);
-        // Assert
-        assertThat(cart.getTotalPrice()).isEqualTo(250.0);
-    }
-
-    @Test
-    void applyDiscount_shouldMakeTotalZero_when100PercentDiscount() {
-        // Arrange
-        Product hat = new Product("Hat", 250.0);
-        cart.addItem(hat);
-        // Act
-        cart.applyDiscount(1.0);
-        // Assert
-        assertThat(cart.getTotalPrice()).isEqualTo(0.0);
+    static Stream<Arguments> discountCases() {
+        return Stream.of(
+                Arguments.of(0.20, 200.0),
+                Arguments.of(0.0, 250.0),
+                Arguments.of(1.0, 0.0)
+        );
     }
 
     @Test
