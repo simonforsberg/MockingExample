@@ -336,4 +336,19 @@ class ShoppingCartTest {
         assertThat(totalItems).isEqualTo(5);
     }
 
+    @Test
+    void clear_shouldRemoveAllItemsFromCart() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        Product pants = new Product("Pants", 700.0);
+        cart.addItem(hat);
+        cart.addItem(pants);
+        cart.applyDiscount(0.2);
+        // Act
+        cart.clear();
+        // Assert
+        assertThat(cart.getItemCount()).isZero();
+        assertThat(cart.getTotalPrice()).isZero();
+    }
+
 }
