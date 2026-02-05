@@ -23,8 +23,8 @@ public class ShoppingCart {
         return items.size();
     }
 
-    public void removeItem(Product product) {
-        items.remove(product);
+    public boolean removeItem(Product product) {
+        return items.remove(product);
     }
 
     public void applyDiscount(double discount) {
