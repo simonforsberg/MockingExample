@@ -318,4 +318,22 @@ class ShoppingCartTest {
                 .hasMessage("Quantity cannot be negative");
     }
 
+    @Test
+    void getTotalItems_shouldReturnSumOfAllQuantities() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        Product pants = new Product("Pants", 700.0);
+        Product jacket = new Product("Jacket", 900.0);
+        cart.addItem(hat);
+        cart.addItem(hat);
+        cart.addItem(pants);
+        cart.addItem(pants);
+        cart.addItem(jacket);
+        // Act
+        int totalItems = cart.getTotalItems();
+        // Assert
+        assertThat(cart.getItemCount()).isEqualTo(3);
+        assertThat(totalItems).isEqualTo(5);
+    }
+
 }
