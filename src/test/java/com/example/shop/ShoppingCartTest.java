@@ -287,4 +287,16 @@ class ShoppingCartTest {
         assertThat(cart.getTotalPrice()).isEqualTo(1000.0);
     }
 
+    @Test
+    void updateQuantity_shouldRemoveProduct_whenQuantityIsZero() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        // Act
+        cart.updateQuantity(hat, 0);
+        // Assert
+        assertThat(cart.getItemCount()).isZero();
+        assertThat(cart.getQuantity(hat)).isZero();
+    }
+
 }
