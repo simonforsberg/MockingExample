@@ -128,4 +128,11 @@ class ShoppingCartTest {
         assertThat(cart.getTotalPrice()).isEqualTo(200.0);
     }
 
+    @Test
+    void newProduct_shouldThrowException_whenNameIsNull() {
+        assertThatThrownBy(() -> new Product(null, 100.0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product name cannot be null");
+    }
+
 }
