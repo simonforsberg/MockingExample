@@ -140,6 +140,17 @@ class ShoppingCartTest {
     }
 
     @Test
+    void applyDiscount_shouldMakeTotalZero_when100PercentDiscount() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        // Act
+        cart.applyDiscount(1.0);
+        // Assert
+        assertThat(cart.getTotalPrice()).isEqualTo(0.0);
+    }
+
+    @Test
     void applyDiscount_shouldThrowException_whenDiscountIsGreaterThan100Percent() {
         // Act + Assert
         assertThatThrownBy(() -> cart.applyDiscount(1.1))
