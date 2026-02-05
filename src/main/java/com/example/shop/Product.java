@@ -1,5 +1,7 @@
 package com.example.shop;
 
+import java.util.Objects;
+
 public class Product {
     private final String name;
     private final double price;
@@ -21,5 +23,16 @@ public class Product {
 
     public double getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product product)) return false;
+        return Double.compare(price, product.price) == 0 && Objects.equals(name, product.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, price);
     }
 }
