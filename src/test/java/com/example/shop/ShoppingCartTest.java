@@ -132,7 +132,7 @@ class ShoppingCartTest {
     void newProduct_shouldThrowException_whenNameIsNull() {
         assertThatThrownBy(() -> new Product(null, 100.0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Product name cannot be null");
+                .hasMessage("Product name cannot be null or blank");
     }
 
 }
