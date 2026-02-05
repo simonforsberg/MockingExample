@@ -77,6 +77,19 @@ class ShoppingCartTest {
     }
 
     @Test
+    void removeItem_shouldUpdateTotalPrice() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        Product pants = new Product("Pants", 700.0);
+        cart.addItem(hat);
+        cart.addItem(pants);
+        // Act
+        cart.removeItem(hat);
+        // Assert
+        assertThat(cart.getTotalPrice()).isEqualTo(700.0);
+    }
+
+    @Test
     void removeItem_shouldReturnFalse_whenItemNotInCart() {
         // Arrange
         Product hat = new Product("Hat", 250.0);
