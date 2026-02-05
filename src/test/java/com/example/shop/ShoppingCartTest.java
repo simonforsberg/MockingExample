@@ -210,4 +210,17 @@ class ShoppingCartTest {
         assertThat(hat1).isNotEqualTo(hat2);
     }
 
+    @Test
+    void addSameProductTwice_shouldIncreaseQuantity() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        // Act
+        cart.addItem(hat);
+        cart.addItem(hat);
+        // Assert
+        assertThat(cart.getItemCount()).isEqualTo(1);
+        assertThat(cart.getQuantity(hat)).isEqualTo(2);
+        assertThat(cart.getTotalPrice()).isEqualTo(500.0);
+    }
+
 }
