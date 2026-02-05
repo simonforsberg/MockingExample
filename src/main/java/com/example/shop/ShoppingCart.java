@@ -30,8 +30,12 @@ public class ShoppingCart {
         return items.getOrDefault(product, 0);
     }
 
-    public int updateQuantity(Product product, int quantity) {
-        return items.put(product, quantity);
+    public void updateQuantity(Product product, int quantity) {
+        if (quantity == 0) {
+            items.remove(product);
+        } else {
+            items.put(product, quantity);
+        }
     }
 
     public boolean removeItem(Product product) {
