@@ -223,4 +223,17 @@ class ShoppingCartTest {
         assertThat(cart.getTotalPrice()).isEqualTo(500.0);
     }
 
+    @Test
+    void getQuantity_shouldReturnCorrectCount() {
+        // Arrange
+        Product hat = new Product("Hat", 250.0);
+        cart.addItem(hat);
+        cart.addItem(hat);
+        cart.addItem(hat);
+        // Act
+        int quantity = cart.getQuantity(hat);
+        // Assert
+        assertThat(quantity).isEqualTo(3);
+    }
+
 }
