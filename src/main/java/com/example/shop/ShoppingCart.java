@@ -34,6 +34,9 @@ public class ShoppingCart {
     }
 
     public void applyDiscount(double discount) {
+        if (discount > 1) {
+            throw new IllegalArgumentException("Discount cannot be greater than 100%");
+        }
         this.discount = discount;
     }
 }
