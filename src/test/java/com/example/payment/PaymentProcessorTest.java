@@ -37,6 +37,7 @@ class PaymentProcessorTest {
         // Assert
         assertTrue(result);
 
+        verify(paymentService).charge(amount);
         verify(paymentRepository).savePayment(amount, "SUCCESS");
         verify(notificationService).sendPaymentConfirmation(email, amount);
     }
