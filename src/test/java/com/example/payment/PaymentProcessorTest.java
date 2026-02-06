@@ -41,7 +41,7 @@ class PaymentProcessorTest {
     void processPayment_shouldSaveAndNotify_whenSuccessful() {
         // Arrange
         double amount = 100.0;
-        String email = "simon.forsberg@iths.se";
+        String email = "customer@example.com";
         PaymentApiResponse successResponse = new PaymentApiResponse(true, "SUCCESS");
         when(paymentService.charge(amount)).thenReturn(successResponse);
         // Act
@@ -64,7 +64,7 @@ class PaymentProcessorTest {
     void processPayment_shouldNotSaveAndNotify_whenUnsuccessful() {
         // Arrange
         double amount = 100.0;
-        String email = "simon.forsberg@iths.se";
+        String email = "customer@example.com";
         PaymentApiResponse failureResponse = new PaymentApiResponse(false, "FAILURE");
         when(paymentService.charge(amount)).thenReturn(failureResponse);
         // Act
