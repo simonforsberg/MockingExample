@@ -14,7 +14,7 @@ public class PaymentProcessor {
         this.notificationService = notificationService;
     }
 
-    public boolean processPayment(String email, double amount) {
+    public boolean processPayment(double amount, String email) {
         PaymentApiResponse response = paymentService.charge(amount);
 
         if (response.success()) {

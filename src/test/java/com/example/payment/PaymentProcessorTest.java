@@ -6,9 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentProcessorTest {
@@ -39,5 +39,20 @@ class PaymentProcessorTest {
 
         verify(paymentRepository).savePayment(amount, "SUCCESS");
         verify(notificationService).sendPaymentConfirmation(email, amount);
+    }
+
+    @Test
+    void processPayment_shouldNotSaveAndNotify_whenUnsuccessful() {
+        // Arrange
+        double amount = 100.0;
+        String email = "simon.forsberg@iths.se";
+        PaymentApiResponse failureResponse = new PaymentApiResponse(false, "FAILURE");
+        when(paymentService.charge(amount)).thenReturn(failureResponse);
+        // Act
+        boolean result = paymentProcessor.processPayment(amount, email);
+        // Assert
+        assertFalse(result);
+
+        verifyNoInteractions(paymentRepository, notificationService);
     }
 }
