@@ -1,6 +1,5 @@
 package com.example.payment;
 
-
 /**
  * Represents the response from a payment processing operation.
  * This immutable record encapsulates the result of a payment transaction.
