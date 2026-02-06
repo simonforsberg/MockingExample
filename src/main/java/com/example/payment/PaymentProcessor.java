@@ -17,15 +17,15 @@ public class PaymentProcessor {
     public boolean processPayment(String email, double amount) {
         PaymentApiResponse response = paymentService.charge(amount);
 
-        if (response.isSuccess()) {
+        if (response.success()) {
             paymentRepository.savePayment(amount, "SUCCESS");
         }
 
-        if (response.isSuccess()) {
+        if (response.success()) {
             notificationService.sendPaymentConfirmation(email, amount);
         }
 
-        return response.isSuccess();
+        return response.success();
     }
 }
 //    private static final String API_KEY = "sk_test_123456";
