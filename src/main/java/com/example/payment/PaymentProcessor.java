@@ -19,9 +19,6 @@ public class PaymentProcessor {
 
         if (response.success()) {
             paymentRepository.savePayment(amount, "SUCCESS");
-        }
-
-        if (response.success()) {
             notificationService.sendPaymentConfirmation(email, amount);
         }
 
