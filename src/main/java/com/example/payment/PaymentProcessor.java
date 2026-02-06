@@ -1,6 +1,33 @@
 package com.example.payment;
 
-//public class PaymentProcessor {
+public class PaymentProcessor {
+    private final PaymentService paymentService;
+    private final PaymentRepository paymentRepository;
+    private final NotificationService notificationService;
+
+    public PaymentProcessor(
+            PaymentService paymentService,
+            PaymentRepository paymentRepository,
+            NotificationService notificationService) {
+        this.paymentService = paymentService;
+        this.paymentRepository = paymentRepository;
+        this.notificationService = notificationService;
+    }
+
+    public boolean processPayment(String email, double amount) {
+        PaymentApiResponse response = paymentService.charge(amount);
+
+        if (response.isSuccess()) {
+            paymentRepository.savePayment(amount, "SUCCESS");
+        }
+
+        if (response.isSuccess()) {
+            notificationService.sendPaymentConfirmation(email, amount);
+        }
+
+        return response.isSuccess();
+    }
+}
 //    private static final String API_KEY = "sk_test_123456";
 //
 //    public boolean processPayment(double amount) {
