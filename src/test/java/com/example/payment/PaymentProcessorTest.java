@@ -10,6 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link PaymentProcessor}.
+ * <p>
+ * Uses Mockito for dependency mocking.
+ * Tests verify the behavior of payment processing.
+ */
 @ExtendWith(MockitoExtension.class)
 class PaymentProcessorTest {
 
@@ -25,6 +31,12 @@ class PaymentProcessorTest {
     @InjectMocks
     private PaymentProcessor paymentProcessor;
 
+    /**
+     * Verifies that a successful payment results in:
+     * - Payment record being saved
+     * - Confirmation notification being sent
+     * - Method returning true
+     */
     @Test
     void processPayment_shouldSaveAndNotify_whenSuccessful() {
         // Arrange
@@ -42,6 +54,12 @@ class PaymentProcessorTest {
         verify(notificationService).sendPaymentConfirmation(email, amount);
     }
 
+    /**
+     * Verifies that a failed payment results in:
+     * - No payment record being saved
+     * - No confirmation notification being sent
+     * - Method returning false
+     */
     @Test
     void processPayment_shouldNotSaveAndNotify_whenUnsuccessful() {
         // Arrange
